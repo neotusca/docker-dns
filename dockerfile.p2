@@ -1,0 +1,17 @@
+FROM bind-dev:p1-new
+
+RUN  groupadd -g 1000 named \
+  ;  useradd -u 1000 -g named -s /sbin/nologin named \
+  ;  mkdir -p /data/named/syslog  /data/named/log \
+  ;  chown -R named:named /data 
+
+ADD  named.conf      /etc/named.conf
+ADD  nis_160110.tar  /data/
+
+RUN  chown -R named:named /data 
+
+
+EXPOSE 53/udp 53/tcp 953/tcp
+
+CMD ["/usr/sbin/named","-f","-u","named"]
+
